@@ -22,19 +22,11 @@ export interface ITodoListWebPartProps {
 }
 
 export default class TodoListWebPart extends BaseClientSideWebPart<ITodoListWebPartProps> {
-
-  private _getMockListData(): Promise<ITodoItem[]> {
-    return MockHttpClient.get()
-      .then((data: ITodoItem[]) => {
-        return data;
-      }) as Promise<ITodoItem[]>;
-  }
-
   public render(): void {
     let service = new MockHttpClient();
 
     //Gör anrop (i detta fall till MockDataService)
-    this._getMockListData()
+    service.get()
 
       // När anropet är klart (kan ta flera sekunder), gör följande
       .then(todos => {

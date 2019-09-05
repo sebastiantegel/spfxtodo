@@ -6,5 +6,5 @@ export interface ITodoListProps {
 
   todoItems: ITodoItem[];
 
-  changeComplete(i: number): void;
+  changeComplete(i: number): Promise<ITodoItem[]>;
 }

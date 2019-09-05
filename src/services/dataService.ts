@@ -2,22 +2,27 @@ import { ITodoItem } from './../models/ISPList';
 
 export default class MockHttpClient  {
 
-    private static _items: ITodoItem[] = [{ Title: 'Gå ut med hunden', Complete: true },
-                                        { Title: 'Handla mat', Complete: false },
-                                        { Title: 'Spring 10 km', Complete: false }];
+    private _items: ITodoItem[];
 
     public constructor() {
+      this._items = [{ Title: 'Gå ut med hunden', Complete: true },
+                     { Title: 'Handla mat', Complete: false },
+                     { Title: 'Spring 10 km', Complete: false }];
 
+      this.changeComplete = this.changeComplete.bind(this);
     }
 
-    public changeComplete(i: number) {
-      alert("Changed value from " + MockHttpClient._items[i].Complete + " to " + !MockHttpClient._items[i].Complete);
-      MockHttpClient._items[i].Complete = !MockHttpClient._items[i].Complete;
+    public changeComplete(i: number) : Promise<ITodoItem[]> {
+      this._items[i].Complete = !this._items[i].Complete;
+
+      return new Promise<ITodoItem[]>((resolve) => {
+        return resolve(this._items);
+      });
     }
 
-    public static get(): Promise<ITodoItem[]> {
+    public get(): Promise<ITodoItem[]> {
         return new Promise<ITodoItem[]>((resolve) => {
-            resolve(MockHttpClient._items);
+            resolve(this._items);
         });
     }
 }

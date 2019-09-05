@@ -2,22 +2,39 @@ import * as React from 'react';
 import styles from './TodoList.module.scss';
 import { ITodoListProps } from './ITodoListProps';
 import { escape } from '@microsoft/sp-lodash-subset';
+import { ITodoItem } from '../../../models/ISPList';
 
-export default class TodoList extends React.Component<ITodoListProps, {}> {
+interface ITodoListState {
+  todoList: ITodoItem[];
+}
+
+export default class TodoList extends React.Component<ITodoListProps, ITodoListState> {
+  constructor(props: ITodoListProps) {
+    super(props);
+
+    this.state = {
+      todoList: this.props.todoItems
+    };
+  }
+
   private handleChange(i: number) {
-    this.props.changeComplete(i);
-    this.render();
+    this.props.changeComplete(i)
+      .then(updatedList => {
+        this.setState({
+          todoList: updatedList
+        });
+      });
   }
 
   public render(): React.ReactElement<ITodoListProps> {
     let listItems: JSX.Element[] = [];
 
-    for(let i = 0; i < this.props.todoItems.length; i++) {
-      if(this.props.todoItems[i].Complete) {
-        listItems.push(<li key={i} className={ styles.done }><input onChange={this.handleChange.bind(this, i)} type="checkbox" defaultChecked /> {this.props.todoItems[i].Title}</li>);
+    for(let i = 0; i < this.state.todoList.length; i++) {
+      if(this.state.todoList[i].Complete) {
+        listItems.push(<li key={i} className={ styles.done }><input onChange={this.handleChange.bind(this, i)} type="checkbox" defaultChecked /> {this.state.todoList[i].Title}</li>);
       }
       else {
-        listItems.push(<li key={i}><input onChange={this.handleChange.bind(this, i)} type="checkbox" /> {this.props.todoItems[i].Title}</li>);
+        listItems.push(<li key={i}><input onChange={this.handleChange.bind(this, i)} type="checkbox" /> {this.state.todoList[i].Title}</li>);
       }
     }
 
