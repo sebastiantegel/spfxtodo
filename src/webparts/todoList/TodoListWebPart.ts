@@ -14,16 +14,22 @@ import TodoList from './components/TodoList';
 import { ITodoListProps } from './components/ITodoListProps';
 import { ITodoItem } from '../../models/ISPList';
 import MockHttpClient from '../../services/dataService';
+import SPDataService from '../../services/spDataService';
 
 export interface ITodoListWebPartProps {
   description: string;
   workDone: boolean;
   showNumberOfItems: number;
+  listTitle: string;
 }
 
 export default class TodoListWebPart extends BaseClientSideWebPart<ITodoListWebPartProps> {
   public render(): void {
-    let service = new MockHttpClient();
+
+    let service = new SPDataService(
+      this.context.spHttpClient,
+      this.context.pageContext.web.absoluteUrl,
+      this.properties.listTitle);
 
     //Gör anrop (i detta fall till MockDataService)
     service.get()
@@ -32,7 +38,7 @@ export default class TodoListWebPart extends BaseClientSideWebPart<ITodoListWebP
       .then(todos => {
 
         // Logga resultate
-        console.log(todos);
+        console.log("Todos: ", todos);
 
         // Skapa upp react-komponenten och skicka med de props som behövs
         const element: React.ReactElement<ITodoListProps > = React.createElement(
@@ -84,6 +90,9 @@ export default class TodoListWebPart extends BaseClientSideWebPart<ITodoListWebP
                   min: 1,
                   max: 20,
                   step: 1
+                }),
+                PropertyPaneTextField('listTitle', {
+                  label: 'List Title'
                 })
               ]
             }
