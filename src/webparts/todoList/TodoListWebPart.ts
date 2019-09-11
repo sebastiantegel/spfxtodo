@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
-import { Version } from '@microsoft/sp-core-library';
+import { Version, Environment, EnvironmentType } from '@microsoft/sp-core-library';
 import {
   BaseClientSideWebPart,
   IPropertyPaneConfiguration,
@@ -12,24 +12,50 @@ import {
 import * as strings from 'TodoListWebPartStrings';
 import TodoList from './components/TodoList';
 import { ITodoListProps } from './components/ITodoListProps';
-import { ITodoItem } from '../../models/ISPList';
-import MockHttpClient from '../../services/dataService';
 import SPDataService from '../../services/spDataService';
+
+import { sp } from '@pnp/sp';
+import PNPDataService from '../../services/pnpDataService';
+import { IDataService } from '../../services/IService';
+import MockDataService from '../../services/dataService';
 
 export interface ITodoListWebPartProps {
   description: string;
   workDone: boolean;
   showNumberOfItems: number;
   listTitle: string;
+
+  usePnp: boolean;
 }
 
 export default class TodoListWebPart extends BaseClientSideWebPart<ITodoListWebPartProps> {
-  public render(): void {
 
-    let service = new SPDataService(
-      this.context.spHttpClient,
-      this.context.pageContext.web.absoluteUrl,
-      this.properties.listTitle);
+  protected onInit(): Promise<void> {
+    return super.onInit().then(_ => {
+      sp.setup({
+        spfxContext: this.context
+      });
+    });
+  }
+
+  public render(): void {
+    let service : IDataService;
+
+    if(Environment.type === EnvironmentType.Local) {
+      service = new MockDataService();
+    }
+    else {
+      if(this.properties.usePnp) {
+        service = new PNPDataService(this.properties.listTitle);
+      }
+      else {
+        service = new SPDataService(
+          this.context.spHttpClient,
+          this.context.pageContext.web.absoluteUrl,
+          this.properties.listTitle
+        );
+      }
+    }
 
     //Gör anrop (i detta fall till MockDataService)
     service.get()
@@ -93,6 +119,9 @@ export default class TodoListWebPart extends BaseClientSideWebPart<ITodoListWebP
                 }),
                 PropertyPaneTextField('listTitle', {
                   label: 'List Title'
+                }),
+                PropertyPaneCheckbox('usePnp', {
+                  text: 'Använd PNP'
                 })
               ]
             }

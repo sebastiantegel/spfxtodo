@@ -1,7 +1,8 @@
 import { ITodoItem } from '../models/ISPList';
 import { SPHttpClient, SPHttpClientResponse } from '@microsoft/sp-http';
+import { IDataService } from './IService';
 
-export default class SPDataService  {
+export default class SPDataService implements IDataService  {
 
     private _httpClient: SPHttpClient;
     private _url: string;

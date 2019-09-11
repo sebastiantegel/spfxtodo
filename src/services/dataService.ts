@@ -1,6 +1,7 @@
 import { ITodoItem } from './../models/ISPList';
+import { IDataService } from './IService';
 
-export default class MockHttpClient  {
+export default class MockDataService implements IDataService  {
 
     private _items: ITodoItem[];
 
