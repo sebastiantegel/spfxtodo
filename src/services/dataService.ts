@@ -5,9 +5,9 @@ export default class MockHttpClient  {
     private _items: ITodoItem[];
 
     public constructor() {
-      this._items = [{ Title: 'Gå ut med hunden', Complete: true },
-                     { Title: 'Handla mat', Complete: false },
-                     { Title: 'Spring 10 km', Complete: false }];
+      this._items = [{ Id: 1, Title: 'Gå ut med hunden', Complete: true },
+                     { Id: 2, Title: 'Handla mat', Complete: false },
+                     { Id: 3, Title: 'Spring 10 km', Complete: false }];
 
       this.changeComplete = this.changeComplete.bind(this);
     }

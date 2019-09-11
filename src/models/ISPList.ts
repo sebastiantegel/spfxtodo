@@ -8,6 +8,7 @@ export interface ISPList {
 }
 
 export interface ITodoItem {
+  Id: number;
   Title: string;
   Complete: boolean;
 }

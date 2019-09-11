@@ -17,8 +17,8 @@ export default class TodoList extends React.Component<ITodoListProps, ITodoListS
     };
   }
 
-  private handleChange(i: number) {
-    this.props.changeComplete(i)
+  private handleChange(id: number) {
+    this.props.changeComplete(id)
       .then(updatedList => {
         this.setState({
           todoList: updatedList
@@ -27,14 +27,15 @@ export default class TodoList extends React.Component<ITodoListProps, ITodoListS
   }
 
   public render(): React.ReactElement<ITodoListProps> {
+
     let listItems: JSX.Element[] = [];
 
     for(let i = 0; i < this.state.todoList.length; i++) {
       if(this.state.todoList[i].Complete) {
-        listItems.push(<li key={i} className={ styles.done }><input onChange={this.handleChange.bind(this, i)} type="checkbox" defaultChecked /> {this.state.todoList[i].Title}</li>);
+        listItems.push(<li key={i} className={ styles.done }><input onChange={this.handleChange.bind(this, this.state.todoList[i].Id)} type="checkbox" defaultChecked /> {this.state.todoList[i].Title}</li>);
       }
       else {
-        listItems.push(<li key={i}><input onChange={this.handleChange.bind(this, i)} type="checkbox" /> {this.state.todoList[i].Title}</li>);
+        listItems.push(<li key={i}><input onChange={this.handleChange.bind(this, this.state.todoList[i].Id)} type="checkbox" /> {this.state.todoList[i].Title}</li>);
       }
     }
 
@@ -43,20 +44,20 @@ export default class TodoList extends React.Component<ITodoListProps, ITodoListS
         <div className={ styles.container }>
           <div className={ styles.row }>
             <div className={ styles.column }>
-              <span className={ styles.title }>Welcome to SharePoint!</span>
+              {/* <span className={ styles.title }>Welcome to SharePoint!</span>
               <p className={ styles.subTitle }>Customize SharePoint experiences using Web Parts.</p>
 
               <p className={ styles.description }>{escape(this.props.description)}</p>
 
-              <p className={ styles.description }>Du har valt: {this.props.numberOfItems}</p>
+              <p className={ styles.description }>Du har valt: {this.props.numberOfItems}</p> */}
 
               <ul>
                 {listItems}
               </ul>
 
-              <a href="https://aka.ms/spfx" className={ styles.button }>
+              {/* <a href="https://aka.ms/spfx" className={ styles.button }>
                 <span className={ styles.label }>Learn more</span>
-              </a>
+              </a> */}
             </div>
           </div>
         </div>

@@ -37,7 +37,7 @@ export default class TodoListWebPart extends BaseClientSideWebPart<ITodoListWebP
       // När anropet är klart (kan ta flera sekunder), gör följande
       .then(todos => {
 
-        // Logga resultate
+        // Logga resultatet
         console.log("Todos: ", todos);
 
         // Skapa upp react-komponenten och skicka med de props som behövs
