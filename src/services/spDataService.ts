@@ -17,7 +17,6 @@ export default class SPDataService implements IDataService  {
     }
 
     public changeComplete(id: number) : Promise<ITodoItem[]> {
-
         console.log("Handling in pure SP REST: ", id);
 
         let etag: string = undefined;
@@ -58,7 +57,6 @@ export default class SPDataService implements IDataService  {
             .then((): Promise<ITodoItem[]> => {
               return this.get();
             });
-
     }
 
     public get(): Promise<ITodoItem[]> {
